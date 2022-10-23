@@ -96,8 +96,8 @@ def index(request):
 
 将函数和url配对. 修改项目配置文件`Ki/urls.py`中`urlpatterns`
 ```python
-# 导入 app01
 from django.urls import path
+# 导入 app01
 from app01 import views
 urlpatterns = [
     # path("admin/", admin.site.urls),

@@ -1,10 +1,5 @@
-- [1. 安装](#1-安装)
-- [2. 项目配置](#2-项目配置)
-- [3. 正式工作](#3-正式工作)
-  - [3.1. 编写 app01中的views.py的index()函数](#31-编写-app01中的viewspy的index函数)
-  - [3.2. 将函数和url配对](#32-将函数和url配对)
-- [4. 启动](#4-启动)
-# 1. 安装
+
+# 安装
 ```bash
 pip install django
 ```
@@ -48,9 +43,11 @@ $ tree
 
 ```
 
-# 2. 项目配置
+# 项目配置
 
-项目配置文件`Ki/settings.py`中`INSTALLED_APPS`. 添加App, `"app01.apps.App01Config"`即`app01/apps.py`的类名`App01Config`
+1. 项目配置文件`Ki/settings.py`中`INSTALLED_APPS`
+   
+   添加App, `"app01.apps.App01Config"`即`app01/apps.py`的类名
 ```python
 #  app01/apps.py
 class App01Config(AppConfig):
@@ -70,23 +67,34 @@ INSTALLED_APPS = [
 ]
 ```
 
-# 3. 正式工作
+# (new)一阶段
 
-## 3.1. 编写 app01中的views.py的index()函数
+app01中创建`templates`文件夹, 创建`hello.html`. (`app01/templates/hello.html`)
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello</title>
+  </head>
+  <body>
+    <p>Hello</p>
+  </body>
+</html>
+
+```
+
+编写 app01中的views.py的index()函数
 ```python
 from django.shortcuts import render
-# 导入 HttpResponse
-from django.shortcuts import HttpResponse
 
 # Create your views here.
 def index(request):
-    return HttpResponse("hello")
+    return render(request, "hello.html")
     pass
 ```
 
-## 3.2. 将函数和url配对
-
-修改项目配置文件`Ki/urls.py`中`urlpatterns`
+将函数和url配对. 修改项目配置文件`Ki/urls.py`中`urlpatterns`
 ```python
 from django.urls import path
 # 导入 app01
@@ -97,9 +105,8 @@ urlpatterns = [
     path("index/", views.index),
 ]
 ```
-根映射是`path("", views.index),`
 
-# 4. 启动
+# 启动
 
 ```python
 $ python manage.py runserver

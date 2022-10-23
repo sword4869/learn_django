@@ -1,53 +1,20 @@
-
-# 安装
+- [1. 安装](#1-安装)
+- [2. 项目配置](#2-项目配置)
+- [3. (new)一阶段](#3-new一阶段)
+  - [3.1. 创建网页](#31-创建网页)
+  - [3.2. 编写 app01中的views.py的index()函数](#32-编写-app01中的viewspy的index函数)
+  - [3.3. 将函数和url配对](#33-将函数和url配对)
+  - [3.4. 使用js](#34-使用js)
+- [4. 启动](#4-启动)
+# 1. 安装
 ```bash
 pip install django
 ```
 
-```bash
-# 创建项目
-$ django-admin startproject <project name>
 
-$ tree
-.
-├── Ki                  项目的管理,启动项目,创建APP,数据管理
-│   ├── asgi.py         [固定]接受异步的网络请求
-│   ├── __init__.py     
-│   ├── settings.py     *[关键]项目配置文件,数据库
-│   ├── urls.py         *[关键]URL和函数的对应关系
-│   └── wsgi.py         [固定]接受同步的网络请求
-└── manage.py
-```
-```bash
-# 创建app
-$ python manage.py startapp <app name>
+# 2. 项目配置
 
-$ tree
-.
-├── app01
-│   ├── admin.py            [固定]默认admin后台管理
-│   ├── apps.py             [固定]app启动
-│   ├── __init__.py
-│   ├── migrations          [固定]数据库变更记录
-│   │   └── __init__.py
-│   ├── models.py           *[关键]操作数据库
-│   ├── tests.py            [固定]单元测试
-│   └── views.py            *[核心]url对应的函数
-├── Ki
-│   ├── asgi.py
-│   ├── __init__.py
-│   ├── settings.py
-│   ├── urls.py
-│   └── wsgi.py
-└── manage.py
-
-```
-
-# 项目配置
-
-1. 项目配置文件`Ki/settings.py`中`INSTALLED_APPS`
-   
-   添加App, `"app01.apps.App01Config"`即`app01/apps.py`的类名
+项目配置文件`Ki/settings.py`中`INSTALLED_APPS`. 添加App, `"app01.apps.App01Config"`即`app01/apps.py`的类名
 ```python
 #  app01/apps.py
 class App01Config(AppConfig):
@@ -67,8 +34,9 @@ INSTALLED_APPS = [
 ]
 ```
 
-# (new)一阶段
+# 3. (new)一阶段
 
+## 3.1. 创建网页
 app01中创建`templates`文件夹, 创建`hello.html`. (`app01/templates/hello.html`)
 ```html
 <!DOCTYPE html>
@@ -81,10 +49,9 @@ app01中创建`templates`文件夹, 创建`hello.html`. (`app01/templates/hello.
     <p>Hello</p>
   </body>
 </html>
-
 ```
 
-编写 app01中的views.py的index()函数
+## 3.2. 编写 app01中的views.py的index()函数
 ```python
 from django.shortcuts import render
 
@@ -94,7 +61,8 @@ def index(request):
     pass
 ```
 
-将函数和url配对. 修改项目配置文件`Ki/urls.py`中`urlpatterns`
+## 3.3. 将函数和url配对
+修改项目配置文件`Ki/urls.py`中`urlpatterns`
 ```python
 from django.urls import path
 # 导入 app01
@@ -106,7 +74,52 @@ urlpatterns = [
 ]
 ```
 
-# 启动
+## 3.4. 使用js
+
+1. 创建文件夹`app01/static/js`, 添加`main.js`文件
+```js
+alert('World')
+```
+2. 修改项目配置`Ki/settings.py`
+
+```python
+STATIC_URL = "static/"
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+```
+3. 整一个名为`world.html`网页
+   
+   在最上面添加`{% load static %}`
+   js文件`src="{% static 'js/main.js' %}"`
+```html
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>World</title>
+  </head>
+  <body>
+    <p>World</p>
+  </body>
+  <script src="{% static 'js/main.js' %}"></script>
+</html>
+```
+```python
+def world(request):
+    return render(request, 'world.html')
+```
+```python
+urlpatterns = [
+    # path("admin/", admin.site.urls),
+    # 映射 index链接到 app01中的views.py的index()函数
+    path("index/", views.index),
+    path("", views.world),
+]
+```
+# 4. 启动
 
 ```python
 $ python manage.py runserver

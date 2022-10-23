@@ -1,7 +1,7 @@
 - [1. 安装](#1-安装)
 - [2. 项目配置](#2-项目配置)
 - [3. 正式工作](#3-正式工作)
-  - [3.1. 编写 app01中的views.py的index()函数](#31-编写-app01中的viewspy的index函数)
+  - [3.1. 编写 app01中的views.py的函数](#31-编写-app01中的viewspy的函数)
   - [3.2. 将函数和url配对](#32-将函数和url配对)
 - [4. 启动](#4-启动)
 # 1. 安装
@@ -72,14 +72,14 @@ INSTALLED_APPS = [
 
 # 3. 正式工作
 
-## 3.1. 编写 app01中的views.py的index()函数
+## 3.1. 编写 app01中的views.py的函数
 ```python
 from django.shortcuts import render
 # 导入 HttpResponse
 from django.shortcuts import HttpResponse
 
 # Create your views here.
-def index(request):
+def hello(request):
     return HttpResponse("hello")
     pass
 ```
@@ -93,11 +93,11 @@ from django.urls import path
 from app01 import views
 urlpatterns = [
     # path("admin/", admin.site.urls),
-    # 映射 index链接到 app01中的views.py的index()函数
-    path("index/", views.index),
+    # 根映射
+    path("", views.hello),
 ]
 ```
-根映射是`path("", views.index),`
+映射<http://127.0.0.1:8000/hello/>链接到 app01中的views.py的hello()函数, `path("hello/", views.hello),`
 
 # 4. 启动
 
@@ -105,4 +105,4 @@ urlpatterns = [
 $ python manage.py runserver
 ```
 
-open <http://127.0.0.1:8000/index/>
+open <http://127.0.0.1:8000>

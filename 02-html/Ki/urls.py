@@ -20,7 +20,6 @@ from django.urls import path
 from app01 import views
 urlpatterns = [
     # path("admin/", admin.site.urls),
-    # 映射 index链接到 app01中的views.py的index()函数
-    path("index/", views.index),
-    path("", views.world),
+    path("", views.hello),
+    path("world/", views.world),
 ]

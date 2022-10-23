@@ -56,7 +56,7 @@ app01中创建`templates`文件夹, 创建`hello.html`. (`app01/templates/hello.
 from django.shortcuts import render
 
 # Create your views here.
-def index(request):
+def hello(request):
     return render(request, "hello.html")
     pass
 ```
@@ -69,8 +69,7 @@ from django.urls import path
 from app01 import views
 urlpatterns = [
     # path("admin/", admin.site.urls),
-    # 映射 index链接到 app01中的views.py的index()函数
-    path("index/", views.index),
+    path("", views.hello),
 ]
 ```
 
@@ -114,9 +113,8 @@ def world(request):
 ```python
 urlpatterns = [
     # path("admin/", admin.site.urls),
-    # 映射 index链接到 app01中的views.py的index()函数
-    path("index/", views.index),
-    path("", views.world),
+    path("", views.hello),
+    path("world/", views.world),
 ]
 ```
 # 4. 启动

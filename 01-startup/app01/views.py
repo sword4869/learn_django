@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponse
 
 # Create your views here.
-def index(request):
+def hello(request):
     return HttpResponse("hello")
     pass

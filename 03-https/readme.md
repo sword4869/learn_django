@@ -1,53 +1,15 @@
-
-# 安装
+- [1. 安装](#1-安装)
+- [2. 项目配置](#2-项目配置)
+- [3. 正式工作](#3-正式工作)
+- [4. 启动](#4-启动)
+# 1. 安装
 ```bash
 pip install django
 ```
 
-```bash
-# 创建项目
-$ django-admin startproject <project name>
+# 2. 项目配置
 
-$ tree
-.
-├── Ki                  项目的管理,启动项目,创建APP,数据管理
-│   ├── asgi.py         [固定]接受异步的网络请求
-│   ├── __init__.py     
-│   ├── settings.py     *[关键]项目配置文件,数据库
-│   ├── urls.py         *[关键]URL和函数的对应关系
-│   └── wsgi.py         [固定]接受同步的网络请求
-└── manage.py
-```
-```bash
-# 创建app
-$ python manage.py startapp <app name>
-
-$ tree
-.
-├── app01
-│   ├── admin.py            [固定]默认admin后台管理
-│   ├── apps.py             [固定]app启动
-│   ├── __init__.py
-│   ├── migrations          [固定]数据库变更记录
-│   │   └── __init__.py
-│   ├── models.py           *[关键]操作数据库
-│   ├── tests.py            [固定]单元测试
-│   └── views.py            *[核心]url对应的函数
-├── Ki
-│   ├── asgi.py
-│   ├── __init__.py
-│   ├── settings.py
-│   ├── urls.py
-│   └── wsgi.py
-└── manage.py
-
-```
-
-# 项目配置
-
-1. 项目配置文件`Ki/settings.py`中`INSTALLED_APPS`
-   
-   添加App, `"app01.apps.App01Config"`即`app01/apps.py`的类名
+项目配置文件`Ki/settings.py`中`INSTALLED_APPS`. 添加App, `"app01.apps.App01Config"`即`app01/apps.py`的类名
 ```python
 #  app01/apps.py
 class App01Config(AppConfig):
@@ -66,50 +28,34 @@ INSTALLED_APPS = [
     "app01.apps.App01Config"
 ]
 ```
-
-# (new)一阶段
-
-app01中创建`templates`文件夹, 创建`hello.html`. (`app01/templates/hello.html`)
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Hello</title>
-  </head>
-  <body>
-    <p>Hello</p>
-  </body>
-</html>
-
-```
-
-编写 app01中的views.py的index()函数
+# 3. 正式工作
+1. 在02-html的hello.html基础上.
+2. 添加Host
+    不然报错`DisallowedHost`
+    项目配置文件`Ki/settings.py`
 ```python
-from django.shortcuts import render
-
-# Create your views here.
-def index(request):
-    return render(request, "hello.html")
-    pass
+ALLOWED_HOSTS = ['*']
 ```
 
-将函数和url配对. 修改项目配置文件`Ki/urls.py`中`urlpatterns`
+2. 安装插件
+
+```bash
+pip install django-extensions, django-werkzeug-debugger-runserver, pyOpenSSL
+```
+3. 项目配置文件`Ki/settings.py`中`INSTALLED_APPS`, 添加
 ```python
-from django.urls import path
-# 导入 app01
-from app01 import views
-urlpatterns = [
-    # path("admin/", admin.site.urls),
-    # 映射 index链接到 app01中的views.py的index()函数
-    path("index/", views.index),
-]
+'werkzeug_debugger_runserver',  # 开启https需要的服务
+'django_extensions',  # 开启https需要的服务
 ```
 
-# 启动
+# 4. 启动
 
 ```python
-$ python manage.py runserver
+# runserver_plus 表示使用 https
+# --cert server.crt 表示证书
+$ python manage.py runserver_plus --cert server.crt 0.0.0.0:8000
 ```
 
-open <http://127.0.0.1:8000/index/>
+open <https://0.0.0.0:8000>
+
+运行后会发现生成的证书: `server.crt`, `server.key`
